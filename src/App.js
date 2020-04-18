@@ -21,8 +21,8 @@ function App() {
 
   async function handleAddRepository() {
     const response = await api.post('repositories', {
-      title: `Repositório ${Date.now()}`,
       url: `url ${Date.now()}`,
+      title: `Repositório ${Date.now()}`,
       techs: [
         `tech ${Date.now()}`,
         `tech ${Date.now()}`
@@ -35,8 +35,9 @@ function App() {
   async function handleRemoveRepository(id) {
     await api.delete(`repositories/${id}`);
 
-    // Obtém novamente a lista de repositórios
-    getRespositories();
+    setRepository(repositories.filter(
+      repository => repository.id != id
+    ));
   }
 
   return (
@@ -44,12 +45,14 @@ function App() {
       <ul data-testid="repository-list">
         {repositories.map(repository => {
           return (
-            <li key={repository.id}>{repository.title}
-              <button onClick={() => handleRemoveRepository(repository.id)}>Remover</button></li>);
+            <li key={repository.id}>
+              {repository.title}
+              <button type="button" onClick={() => handleRemoveRepository(repository.id)}>Remover</button>
+            </li>);
         })}
       </ul>
 
-      <button onClick={handleAddRepository}>Adicionar</button>
+      <button type="button" onClick={handleAddRepository}>Adicionar</button>
     </div>
   );
 }
